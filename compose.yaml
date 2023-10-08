@@ -1,0 +1,29 @@
+version: '3'
+services:
+  backend:
+    restart: always
+    build:
+      context: backend
+    ports:
+      - "3000:3000"
+    volumes:
+        - ./app:/usr/src/app
+        - /usr/src/app/node_modules
+    networks:
+      - backend-db
+    depends_on:
+      - db
+
+  db:
+    restart: always
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - ./data:/data/db
+    expose:
+      - 27017
+
+networks:
+  backend-db:
